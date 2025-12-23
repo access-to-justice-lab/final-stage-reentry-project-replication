@@ -1,0 +1,349 @@
+"STID","Treatment","QID2","Gender","PhysicalStatus","age","female","disabled","reason_education","Race","Ethnicity","Sex","MaritalStatus","AdultsInHome","ChildrenInHome","TotalFamily","Citizenship","pstudy_employed","LessHighSchool","HighSchool","SomeCollege","College"
+"KSSTID0001",1,0,"Female","None",44,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",1,0,0,0,1
+"KSSTID0002",0,0,"Female","None",50,1,0,0,"White","Non-Hispanic","Female","Married",2,2,4,"Citizen",1,0,0,0,1
+"KSSTID0003",1,0,"Male","Physical Disabilities",28,0,1,0,"Asian","","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0004",0,NA,"Female","No Disabilities",47,1,0,0,"White","Non-Hispanic","Female","Widowed",1,1,2,"Citizen",NA,0,0,0,0
+"KSSTID0005",0,1,"Male","No Disabilities",51,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",0,0,1,0,0
+"KSSTID0006",1,0,"Female","No Disabilities",41,1,0,0,"White","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0007",1,0,"Female","Physical Disabilities",57,1,1,0,"Hispanic","","Female","Divorced",1,0,1,"Eligible Alien",1,0,0,0,1
+"KSSTID0008",0,NA,"Male","Physical Disabilities",51,0,1,0,"White","Non-Hispanic","Male","Separated",1,0,1,"Citizen",NA,0,0,0,0
+"KSSTID0009",1,1,"Female","No Disabilities",37,1,0,0,"White","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",0,0,1,0,0
+"KSSTID0010",1,0,"Female","Physical Disabilities",45,1,1,0,"White","Non-Hispanic","Female","Divorced",1,3,4,"Citizen",1,0,1,0,0
+"KSSTID0011",0,0,"Female","Non-Disabled",35,1,0,0,"White","Non-Hispanic","Female","Single",2,6,8,"Citizen",1,1,0,0,0
+"KSSTID0012",0,0,"Male","Not Disabled",44,0,0,0,"Native","","Male","",2,3,5,"Citizen",1,0,1,0,0
+"KSSTID0013",0,NA,"Female","Non-Disabled",44,1,0,0,"White","Non-Hispanic","Female","Married",2,1,3,"Citizen",NA,0,0,0,0
+"KSSTID0014",1,0,"Male","Non-Disabled",32,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0015",0,0,"Male","Non-Disabled",49,0,0,0,"White","Non-Hispanic","Male","Married",2,6,8,"Citizen",1,0,0,1,0
+"KSSTID0016",1,0,"Male","No Disabilities",34,0,0,0,"White","Non-Hispanic","Male","Divorced",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0016",1,0,"Male","No Disabilities",34,0,0,0,"White","Non-Hispanic","Male","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0017",1,0,"Male","Non-Disabled",55,0,0,0,"White","Non-Hispanic","Male","Divorced",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0018",1,0,"Female","Non-Disabled",50,1,0,0,"White","Non-Hispanic","Female","Married",2,3,5,"Citizen",1,0,0,1,0
+"KSSTID0019",1,0,"Male","Disabled",33,0,1,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0020",0,0,"Male","Non-Disabled",63,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0021",1,0,"Male","Non-Disabled",59,0,0,0,"White","Non-Hispanic","Male","Single",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0022",1,0,"Male","Non-Disabled",42,0,0,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0023",0,0,"Male","Non-Disabled",35,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0024",1,0,"Male","Non-Disabled",44,0,0,0,"White","Non-Hispanic","Male","Married",2,3,5,"Citizen",1,0,0,0,1
+"KSSTID0025",0,0,"Female","Non-disabled",53,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0026",1,0,"Male","Physical Disabilities",61,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0027",0,0,"Female","Non-Disabled",39,1,0,0,"White","Non-Hispanic","Female","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0028",0,0,"Female","Non-Disabled",32,1,0,0,"White","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,0,1,0,0
+"KSSTID0029",1,0,"Female","Non-Disabled",47,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0030",1,0,"Female","Non-Disabled",38,1,0,0,"Black","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0031",0,0,"Male","Non-Disabled",76,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0032",1,0,"Male","Non-disabled",61,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0033",0,0,"Female","Non-disabled",48,1,0,0,"White","Non-Hispanic","Female","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0034",0,0,"Male","Non-disabled",52,0,0,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0035",0,0,"Male","Non-disabled",48,0,0,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",1,1,0,0,0
+"KSSTID0036",0,0,"Female","Non-disabled",68,1,0,0,"Native","","Female","",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0037",1,0,"Female","Non-disabled",39,1,0,0,"Other","","Female","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0038",1,1,"Male","Non-Disabled",35,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,1,0,0
+"KSSTID0039",1,0,"Male","Non-disabled",30,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0041",1,0,"Male","Non-disabled",62,0,0,0,"White","Non-Hispanic","Male","Married",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0042",1,0,"Female","Non-disabled",36,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0043",1,1,"Male","Non-disabled",52,0,0,0,"White","Non-Hispanic","Male","Married",2,3,5,"Citizen",0,0,0,1,0
+"KSSTID0044",1,1,"Female","Non-Disabled",51,1,0,0,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",0,0,0,1,0
+"KSSTID0045",0,0,"Female","Non-disabled",33,1,0,0,"Black","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0046",0,0,"Female","Non-disabled",51,1,0,0,"White","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0047",1,0,"Male","Non-disabled",69,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0048",0,0,"Male","Physical",55,0,1,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0049",0,0,"Female","Non-disabled",29,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0050",1,0,"Male","Non-disabled",51,0,0,0,"Asian","","Male","Single",1,4,5,"Citizen",1,0,0,1,0
+"KSSTID0051",0,0,"Female","Non-disabled",35,1,0,0,"White","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0052",0,0,"Male","Non-disabled",53,0,0,0,"Multi","","Male","",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0053",0,0,"Female","Non-disabled",31,1,0,0,"White","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0054",1,0,"Female","Non-disabled",56,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0055",1,1,"Male","Non-disabled",45,0,0,0,"White","Non-Hispanic","Male","Married",2,4,6,"Citizen",0,0,0,1,0
+"KSSTID0056",0,1,"Female","Non-disabled",48,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",0,0,0,0,1
+"KSSTID0057",0,0,"Male","Non-disabled",50,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0058",1,0,"Female","Non-disabled",32,1,0,0,"Hispanic","","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0059",0,0,"Male","Non-disabled",32,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0060",1,0,"Female","Non-disabled",41,1,0,0,"White","Non-Hispanic","Female","Divorced",1,4,5,"Citizen",1,0,0,1,0
+"KSSTID0061",0,0,"Male","Non-disabled",70,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0062",1,0,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0063",0,0,"Male","Non-disabled",32,0,0,0,"White","Non-Hispanic","Male","Married",3,2,5,"Citizen",1,0,0,0,0
+"KSSTID0064",0,0,"Male","Non-disabled",69,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0065",0,0,"Male","Disabled",47,0,1,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0066",1,1,"Female","Non-disabled",60,1,0,0,"White","Non-Hispanic","Female","Married",NA,0,NA,"Citizen",0,0,0,1,0
+"KSSTID0067",0,0,"Female","Non-disabled",42,1,0,0,"White","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,1,0,0,0
+"KSSTID0068",1,0,"Female","Non-disabled",64,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0069",1,1,"Male","Non-disabled",28,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0070",0,1,"Male","Non-disabled",47,0,0,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",0,0,0,1,0
+"KSSTID0071",1,1,"Male","Non-disabled",52,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0072",0,0,"Female","Non-disabled",54,1,0,0,"Black","Non-Hispanic","Female","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0073",0,0,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Separated",1,2,3,"Citizen",1,1,0,0,0
+"KSSTID0074",1,0,"Male","Non-disabled",46,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0075",1,1,"Male","Non-disabled",45,0,0,0,"White","Non-Hispanic","Male","Single",1,2,3,"Citizen",0,1,0,0,0
+"KSSTID0076",1,1,"Female","Non-disabled",52,1,0,0,"White","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",0,0,1,0,0
+"KSSTID0077",1,1,"Female","Non-disabled",42,1,0,0,"White","Non-Hispanic","Female","Single",1,1,2,"Citizen",0,0,0,0,1
+"KSSTID0078",0,0,"Male","Non-disabled",43,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0079",1,0,"Male","Physical Disabilities",47,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0080",1,1,"Male","Non-disabled",35,0,0,1,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",0,0,1,0,0
+"KSSTID0081",1,0,"Female","Non-disabled",37,1,0,1,"Black","Non-Hispanic","Female","Single",1,5,6,"Citizen",1,0,1,0,0
+"KSSTID0082",0,0,"Male","Non-disabled",56,0,0,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0083",1,0,"Female","Non-disabled",34,1,0,0,"Black","Non-Hispanic","Female","Single",1,3,4,"Citizen",1,0,0,1,0
+"KSSTID0084",0,0,"Female","Non-disabled",42,1,0,0,"Native","","Female","",1,5,6,"Citizen",1,1,0,0,0
+"KSSTID0085",0,0,"Male","Non-disabled",67,0,0,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,1,0,0
+"KSSTID0086",0,0,"Female","Non-disabled",37,1,0,0,"Hispanic","","Female","Separated",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0087",0,0,"Female","Non-disabled",37,1,0,0,"Multi","","Female","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0088",1,0,"Female","Non-disabled",35,1,0,0,"Multi","","Female","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0089",1,0,"Female","Non-disabled",53,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0090",1,1,"Male","Non-disabled",33,0,0,0,"Black","Non-Hispanic","Male","Common",2,2,4,"Citizen",0,0,0,1,0
+"KSSTID0091",0,0,"Female","Non-disabled",46,1,0,0,"White","Non-Hispanic","Female","Separated",2,0,2,"Citizen",1,1,0,0,0
+"KSSTID0092",1,1,"Male","Non-disabled",43,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0093",1,1,"Male","Non-disabled",55,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0093",1,1,"Male","Non-disabled",55,0,0,0,"White","Non-Hispanic","Female","Single",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0094",1,1,"Male","Non-disabled",42,0,0,0,"Multi","","Male","",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0095",1,1,"Female","Non-disabled",29,1,0,0,"White","Non-Hispanic","Female","Single",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0096",0,1,"Male","Non-disabled",40,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0097",0,1,"Female","Non-disabled",47,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",0,0,0,1,0
+"KSSTID0098",1,0,"Female","Non-disabled",30,1,0,0,"Hispanic","","Female","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0099",0,0,"Male","Non-disabled",49,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0100",0,0,"Male","Physical Disabilities",62,0,1,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0101",1,0,"Female","Physical Disabilities",58,1,1,0,"Multi","","Female","",1,3,4,"Citizen",1,0,0,1,0
+"KSSTID0102",0,1,"Female","Non-disabled",55,1,0,0,"White","Non-Hispanic","Female","Widowed",1,0,1,"Citizen",0,0,0,0,1
+"KSSTID0103",0,0,"Female","Non-disabled",37,1,0,0,"White","Non-Hispanic","Female","Married",2,4,6,"Citizen",1,0,0,1,0
+"KSSTID0104",1,0,"Female","Non-disabled",63,1,0,0,"White","Non-Hispanic","Female","Divorced",2,0,2,"Citizen",1,0,0,0,1
+"KSSTID0105",0,1,"Female","Non-disabled",39,1,0,0,"Black","Non-Hispanic","Female","Single",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0106",0,0,"Male","Non-disabled",56,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0107",0,1,"Male","Non-disabled",32,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,1,0,0
+"KSSTID0108",0,0,"Male","Non-disabled",38,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0109",0,1,"Male","Non-disabled",38,0,0,0,"Hispanic","","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0110",1,1,"Male","Non-disabled",36,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0111",0,1,"Male","Non-disabled",45,0,0,0,"Black","Non-Hispanic","Male","Single",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0112",0,0,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Married",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0113",1,0,"Female","Non-disabled",42,1,0,0,"Asian","","Female","Separated",1,3,4,"Citizen",1,0,0,1,0
+"KSSTID0114",1,1,"Male","Non-disabled",41,0,0,0,"Black","Non-Hispanic","Male","Married",2,0,2,"Citizen",0,0,0,1,0
+"KSSTID0115",1,0,"Male","Non-disabled",48,0,0,0,"Multi","","Male","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0116",1,0,"Male","Non-disabled",47,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0117",1,0,"Male","Physical Disabilities",39,0,1,1,"Hispanic","","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0118",1,0,"Male","Physical Disabilities",52,0,1,0,"Black","Non-Hispanic","Male","Divorced",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0119",0,1,"Male","Non-disabled",40,0,0,0,"Hispanic","","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0120",1,1,"Male","Non-disabled",49,0,0,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",0,0,0,1,0
+"KSSTID0121",0,0,"Female","Non-disabled",41,1,0,0,"White","Non-Hispanic","Female","Divorced",1,3,4,"Citizen",1,0,0,1,0
+"KSSTID0122",0,0,"Female","Non-disabled",46,1,0,0,"Multi","","Female","",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0123",0,0,"Male","Non-disabled",42,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0124",0,1,"Male","Non-disabled",37,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0125",1,0,"Male","Non-Disabled",47,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0126",0,0,"Female","Non-disabled",48,1,0,0,"White","Non-Hispanic","Female","Separated",1,6,7,"Citizen",1,0,0,0,1
+"KSSTID0127",0,1,"Female","Non-disabled",37,1,0,0,"White","Non-Hispanic","Female","Married",2,2,4,"Citizen",0,0,0,1,0
+"KSSTID0128",1,0,"Male","Non-disabled",36,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0129",1,1,"Female","Non-disabled",54,1,0,0,"White","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0130",0,0,"Female","None",43,1,0,0,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",1,0,0,0,1
+"KSSTID0131",0,0,"Male","Physically Disabled",54,0,1,0,"White","Non-Hispanic","Male","Widowed",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0132",1,0,"Male","Non-disabled",52,0,0,0,"Hispanic","","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0133",0,1,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Single",1,1,2,"Citizen",0,0,0,0,1
+"KSSTID0134",1,0,"Female","Non-disabled",48,1,0,0,"Black","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0135",1,1,"Female","Non-disabled",49,1,0,0,"White","Non-Hispanic","Female","Separated",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0136",1,0,"Female","Non-disabled",49,1,0,0,"White","Non-Hispanic","Female","Common",4,0,4,"Citizen",1,0,0,1,0
+"KSSTID0137",1,0,"Male","Non-disabled",41,0,0,1,"Black","Non-Hispanic","Male","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0138",0,0,"Female","Non-disabled",37,1,0,1,"White","Non-Hispanic","Female","Single",1,4,5,"Citizen",1,0,0,1,0
+"KSSTID0139",1,1,"Female","Non-disabled",54,1,0,0,"Black","Non-Hispanic","Female","Single",2,0,2,"Citizen",0,0,0,1,0
+"KSSTID0140",1,0,"Female","Physical Disabilities",57,1,1,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0141",1,0,"Male","Non-disabled",42,0,0,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0142",0,0,"Male","Physical Disabilities",57,0,1,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0143",0,0,"Male","Non-disabled",39,0,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0144",0,0,"Female","Non-disabled",59,1,0,0,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",1,0,1,0,0
+"KSSTID0145",1,0,"Male","Non-disabled",34,0,0,0,"Multi","","Male","",2,4,6,"Citizen",1,0,0,1,0
+"KSSTID0146",1,0,"Male","Non-disabled",34,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0147",0,0,"Male","Physically Disabled",63,0,1,0,"Black","Non-Hispanic","Male","Widowed",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0148",0,0,"Female","Non-disabled",35,1,0,0,"White","Non-Hispanic","Transgender","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0149",1,0,"Female","Non-disabled",35,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,1,0,0,0
+"KSSTID0150",1,1,"Male","Non-disabled",54,0,0,0,"Multi","","Male","",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0151",0,0,"Male","Non-disabled",53,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0152",1,0,"Male","Non-disabled",68,0,0,0,"Black","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0153",0,0,"Male","Non-disabled",43,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,1,0,0
+"KSSTID0154",0,1,"Male","Non-disabled",34,0,0,0,"Multi","","Male","",1,1,2,"Citizen",0,0,1,0,0
+"KSSTID0155",0,0,"Female","Non-disabled",45,1,0,0,"Black","Non-Hispanic","Female","Single",1,3,4,"Citizen",1,0,1,0,0
+"KSSTID0156",1,1,"Male","Non-disabled",40,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0157",1,0,"Female","Non-disabled",42,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0158",1,1,"Male","Non-disabled",45,0,0,0,"Asian","","Male","Divorced",1,0,1,"Citizen",0,0,0,0,1
+"KSSTID0159",1,1,"Male","Non-disabled",38,0,0,0,"Black","Non-Hispanic","Male","Single",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0160",0,0,"Female","Non-disabled",57,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0161",1,0,"Female","Non-disabled",31,1,0,0,"Black","Non-Hispanic","Female","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0162",0,0,"Male","Non-disabled",47,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0163",0,0,"Male","Disabled",74,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0164",0,0,"Female","Non-disabled",57,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0165",1,1,"Female","Non-disabled",37,1,0,0,"Black","Non-Hispanic","Female","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0166",1,0,"Female","Non-disabled",54,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0167",0,0,"Female","Non-disabled",64,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0168",0,0,"Female","Physically Disabled",45,1,1,0,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",1,1,0,0,0
+"KSSTID0169",1,1,"Male","Non-disabled",45,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",0,0,0,1,0
+"KSSTID0170",1,0,"Male","Non-disabled",41,0,0,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0171",0,0,"Female","Non-disabled",35,1,0,0,"Asian","","Female","Divorced",1,2,3,"Citizen",1,0,1,0,0
+"KSSTID0172",1,0,"Male","Non-disabled",49,0,0,0,"White","Non-Hispanic","Male","Common",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0173",0,0,"Female","Non-disabled",47,1,0,0,"White","Non-Hispanic","Female","Single",1,1,2,"Citizen",1,0,1,0,0
+"KSSTID0174",0,1,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",0,0,1,0,0
+"KSSTID0175",0,0,"Female","Physically Disabled",50,1,1,0,"White","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",1,1,0,0,0
+"KSSTID0176",1,0,"Female","Non-disabled",41,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0177",1,0,"Female","Non-disabled",62,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0178",1,1,"Male","Non-disabled",39,0,0,0,"Black","Non-Hispanic","Male","Common",2,3,5,"Citizen",0,0,0,1,0
+"KSSTID0179",1,0,"Male","Physically Disabled",36,0,1,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0180",0,0,"Male","Non-disabled",31,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0181",0,1,"Female","Non-disabled",32,1,0,0,"White","Non-Hispanic","Female","Single",1,3,4,"Citizen",0,0,0,1,0
+"KSSTID0182",0,0,"Male","Non-disabled",48,0,0,0,"White","Non-Hispanic","Male","Common",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0183",1,0,"Female","Physically Disabled",45,1,1,0,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0184",0,0,"Male","Non-disabled",34,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,1,0,0,0
+"KSSTID0185",1,0,"Female","Non-disabled",63,1,0,0,"White","Non-Hispanic","Female","Separated",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0186",1,0,"Female","Non-disabled",61,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0187",0,1,"Male","Non-disabled",48,0,0,0,"White","Non-Hispanic","Male","Single",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0188",0,0,"Male","Non-disabled",43,0,0,0,"White","Non-Hispanic","Male","Married",2,5,7,"Citizen",1,0,0,1,0
+"KSSTID0189",1,0,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Divorced",2,2,4,"Citizen",1,0,0,0,1
+"KSSTID0190",0,0,"Female","Non-disabled",43,1,0,0,"Hispanic","","Female","Divorced",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0191",0,0,"Female","Non-disabled",56,1,0,0,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",1,0,1,0,0
+"KSSTID0192",1,0,"Male","Non-disabled",63,0,0,0,"White","Non-Hispanic","Male","Divorced",1,1,2,"Citizen",1,1,0,0,0
+"KSSTID0193",1,0,"Female","Non-disabled",45,1,0,0,"Asian","","Female","Divorced",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0194",0,0,"Male","Physical disabilities",46,0,1,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0195",1,1,"Female","Non-disabled",34,1,0,1,"Black","Non-Hispanic","Female","Divorced",1,1,2,"Citizen",0,0,0,1,0
+"KSSTID0196",1,1,"Male","Non-disabled",59,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0197",1,0,"Female","Non-disabled",46,1,0,0,"White","Non-Hispanic","Female","Married",2,1,3,"Citizen",1,0,0,0,1
+"KSSTID0198",0,0,"Male","Non-disabled",34,0,0,0,"White","Non-Hispanic","Male","Divorced",2,3,5,"Citizen",1,0,1,0,0
+"KSSTID0199",0,0,"Male","Non-disabled",62,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0200",1,1,"Male","Non-disabled",38,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,1,0,0
+"KSSTID0201",1,0,"Male","Non-disabled",61,0,0,0,"Hispanic","","Male","Married",2,2,4,"Citizen",1,1,0,0,0
+"KSSTID0202",1,0,"Male","Non-disabled",39,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0203",1,1,"Male","Physical Disabilities",47,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",0,0,1,0,0
+"KSSTID0204",0,1,"Male","Non-disabled",54,0,0,0,"Black","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",0,0,1,0,0
+"KSSTID0205",1,0,"Female","Non-disabled",30,1,0,0,"White","Non-Hispanic","Female","Divorced",2,2,4,"Citizen",1,0,1,0,0
+"KSSTID0206",1,1,"Male","Non-disabled",38,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0207",1,1,"Male","Non-disabled",41,0,0,0,"White","Non-Hispanic","Male","Common",2,0,2,"Citizen",0,0,1,0,0
+"KSSTID0208",0,0,"Male","Non-disabled",49,0,0,0,"White","Non-Hispanic","Male","Widowed",3,1,4,"Citizen",1,0,0,1,0
+"KSSTID0209",1,1,"Male","Non-disabled",47,0,0,0,"White","Non-Hispanic","Male","Married",2,3,5,"Citizen",0,0,1,0,0
+"KSSTID0210",0,0,"Male","Physical Disabilities",59,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0211",0,0,"Male","Non-disabled",47,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,1,0,0,0
+"KSSTID0212",0,0,"Female","Physical Disabilities",37,1,1,0,"White","Non-Hispanic","Female","Widowed",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0213",0,1,"Female","Non-disabled",41,1,0,1,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",0,0,0,0,1
+"KSSTID0214",1,0,"Male","Non-disabled",30,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0215",0,0,"Male","Non-disabled",54,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0216",0,0,"Male","Non-disabled",47,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0217",0,0,"Male","Non-disabled",39,0,0,0,"Black","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0218",1,0,"Female","Non-disabled",68,1,0,0,"Black","Non-Hispanic","Female","Widowed",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0219",0,0,"Male","Non-disabled",54,0,0,0,"Hispanic","","Male","Divorced",1,1,2,"Citizen",1,0,1,0,0
+"KSSTID0220",1,1,"Male","Non-disabled",60,0,0,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",0,0,0,1,0
+"KSSTID0221",0,0,"Male","Non-disabled",56,0,0,1,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0222",0,1,"Female","Non-disabled",57,1,0,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0223",1,0,"Female","Non-disabled",48,1,0,1,"Black","Non-Hispanic","Female","Separated",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0224",0,0,"Male","Non-disabled",58,0,0,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",1,0,1,0,0
+"KSSTID0225",0,0,"Male","Non-disabled",61,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0226",0,0,"Male","Non-disabled",39,0,0,0,"White","Non-Hispanic","Male","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0227",0,0,"Female","Non-disabled",44,1,0,0,"Black","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0228",0,1,"Female","Non-disabled",44,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0229",1,0,"Male","Non-disabled",42,0,0,0,"White","Non-Hispanic","Male","Married",2,5,7,"Citizen",1,0,0,1,0
+"KSSTID0230",0,1,"Female","Non-disabled",53,1,0,1,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",0,0,0,1,0
+"KSSTID0231",1,0,"Male","Physically disabled",46,0,1,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0232",1,0,"Male","Non-disabled",59,0,0,0,"Black","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0233",1,0,"Male","Non-disabled",39,0,0,0,"Black","Non-Hispanic","Male","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0234",1,1,"Male","Non-disabled",36,0,0,0,"Black","Non-Hispanic","Male","Married",2,1,3,"Citizen",0,0,1,0,0
+"KSSTID0235",0,1,"Female","Non-disabled",33,1,0,0,"White","Non-Hispanic","Female","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0236",1,0,"Male","Physically disabled",67,0,1,0,"White","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0237",0,0,"Female","Non-disabled",50,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0238",1,0,"Female","Non-disabled",50,1,0,0,"White","Non-Hispanic","Female","Divorced",2,3,5,"Citizen",1,0,0,1,0
+"KSSTID0239",1,0,"Female","Non-disabled",41,1,0,0,"Hispanic","","Female","Single",1,5,6,"Citizen",1,0,0,1,0
+"KSSTID0240",1,0,"Female","Non-disabled",54,1,0,0,"White","Non-Hispanic","Female","Married",2,0,2,"Citizen",1,0,0,0,1
+"KSSTID0241",0,0,"Female","Physical & Cognitive Disabilities due to Stroke",67,1,1,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0242",1,0,"Male","Non-disabled",41,0,0,0,"White","Non-Hispanic","Male","Single",1,1,2,"Citizen",1,0,0,0,1
+"KSSTID0243",1,0,"Female","Non-disabled",33,1,0,0,"Black","Non-Hispanic","Female","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0244",0,NA,"Female","Physically disabled",66,1,1,0,"White","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",NA,0,0,0,0
+"KSSTID0245",0,0,"Male","Non-disabled",39,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0246",1,0,"Male","Physically Disabled",60,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0247",0,1,"Male","Non-disabled",31,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0248",1,1,"Male","Non-disabled",40,0,0,0,"Other","","Male","Separated",1,1,2,"Citizen",0,0,0,0,1
+"KSSTID0249",1,1,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Separated",1,2,3,"Citizen",0,0,0,1,0
+"KSSTID0250",0,1,"Female","Non-disabled",42,1,0,0,"White","Non-Hispanic","Female","Married",2,1,3,"Citizen",0,0,0,1,0
+"KSSTID0251",0,0,"Female","Non-disabled",61,1,0,0,"White","Non-Hispanic","Female","Separated",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0252",0,0,"Male","Physically disabled",46,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0253",1,0,"Male","Non-disabled",47,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",1,0,0,0,1
+"KSSTID0254",0,0,"Male","Non-disabled",40,0,0,1,"White","Non-Hispanic","Male","Single",2,2,4,"Citizen",1,0,1,0,0
+"KSSTID0255",1,1,"Female","Non-disabled",30,1,0,0,"Multi","","Female","",1,2,3,"Citizen",0,0,0,1,0
+"KSSTID0256",0,1,"Male","Non-disabled",51,0,0,0,"White","Non-Hispanic","Male","Married",2,2,4,"Citizen",0,0,0,0,1
+"KSSTID0257",1,0,"Female","Non-disabled",39,1,0,0,"White","Non-Hispanic","Female","Divorced",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0258",1,0,"Male","Non-disabled",37,0,0,0,"White","Non-Hispanic","Male","Married",2,3,5,"Citizen",1,1,0,0,0
+"KSSTID0259",0,0,"Male","Non-disabled",63,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0260",1,0,"Female","Non-disabled",31,1,0,0,"Black","Non-Hispanic","Female","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0261",1,0,"Female","Non-disabled",36,1,0,1,"White","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0262",0,0,"Male","Physical",68,0,1,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,1,0,0,0
+"KSSTID0263",0,0,"Female","Non-disabled",43,1,0,0,"Black","Non-Hispanic","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0264",1,0,"Female","Non-disabled",35,1,0,0,"White","","Female","",2,3,5,"Citizen",1,0,0,1,0
+"KSSTID0265",1,0,"Male","Physical disabilities",62,0,1,0,"Black","Non-Hispanic","Male","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0266",1,0,"Female","Non-disabled",45,1,0,0,"White","Non-Hispanic","Female","Separated",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0267",1,0,"Female","Non-disabled",34,1,0,0,"Black","Non-Hispanic","Female","Single",1,1,2,"Citizen",1,1,0,0,0
+"KSSTID0268",0,0,"Male","Non-disabled",48,0,0,0,"White","Non-Hispanic","Male","Married",2,1,3,"Citizen",1,0,1,0,0
+"KSSTID0269",0,0,"Male","Physical Disabilities",46,0,1,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0270",1,0,"Female","Non-disabled",65,1,0,0,"Black","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0271",1,0,"Male","Non-disabled",42,0,0,0,"White","","Male","",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0272",1,0,"Female","Non-disabled",68,1,0,0,"Hispanic","","Female","Married",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0273",1,0,"Female","Non-disabled",44,1,0,0,"White","","Female","",1,3,4,"Citizen",1,0,0,0,1
+"KSSTID0274",0,0,"Female","Non-disabled",40,1,0,0,"White","","Female","",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0275",0,0,"Female","Non-disabled",41,1,0,0,"Black","Non-Hispanic","Female","Single",1,2,3,"Citizen",1,1,0,0,0
+"KSSTID0276",0,0,"Male","Non-disabled",45,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0277",0,0,"Male","Non-disabled",38,0,0,0,"White","Non-Hispanic","Male","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0278",0,0,"Female","Non-disabled",30,1,0,0,"White","Non-Hispanic","Female","Single",1,3,4,"Citizen",1,0,0,1,0
+"KSSTID0279",1,0,"Female","Non-disabled",43,1,0,0,"White","","Female","",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0280",0,0,"Female","Non-disabled",54,1,0,0,"White","","Female","",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0281",1,0,"Female","Non-disabled",83,1,0,0,"Black","Non-Hispanic","Female","Divorced",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0282",0,0,"Male","Non-disabled",36,0,0,0,"White","","Male","",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0283",0,0,"Female","Non-disabled",43,1,0,0,"White","","Female","",2,3,5,"Citizen",1,0,1,0,0
+"KSSTID0284",1,0,"Female","Non-disabled",52,1,0,0,"Black","Non-Hispanic","Female","Divorced",2,2,4,"Citizen",1,0,0,1,0
+"KSSTID0285",0,0,"Male","Non-disabled",41,0,0,0,"Other","","Male","Married",2,3,5,"Citizen",1,0,0,1,0
+"KSSTID0286",1,1,"Male","Non-disabled",62,0,0,0,"White","Non-Hispanic","Male","Divorced",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0287",1,0,"Female","Non-disabled",42,1,0,0,"Hispanic","","Female","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0288",0,1,"Male","Non-disabled",49,0,0,0,"White","","Male","",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0289",1,0,"Female","Non-disabled",60,1,0,0,"Black","","Female","",1,2,3,"Citizen",1,0,0,0,1
+"KSSTID0290",0,0,"Female","Non-disabled",35,1,0,0,"White","","Female","",2,0,2,"Citizen",1,1,0,0,0
+"KSSTID0291",0,0,"Female","Non-disabled",50,1,0,0,"White","","Female","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0292",1,0,"Male","Non-disabled",40,0,0,0,"Native","","Male","",1,3,4,"Citizen",1,0,1,0,0
+"KSSTID0293",0,0,"Male","Non-disabled",33,0,0,0,"White","","Male","",2,3,5,"Citizen",1,0,0,1,0
+"KSSTID0294",0,0,"Male","Non-disabled",69,0,0,0,"White","","Male","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0295",1,0,"Male","Non-disabled",49,0,0,0,"Black","","Male","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0296",0,1,"Female","Non-disabled",35,1,0,0,"White","","Female","",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0297",1,0,"Female","Physically disabled",63,1,1,0,"White","","Female","",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0298",0,0,"Male","Non-disabled",55,0,0,0,"Black","","Male","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0299",1,0,"Male","Non-disabled",50,0,0,0,"White","","Male","",2,3,5,"Citizen",1,0,1,0,0
+"KSSTID0300",1,1,"Female","Non-disabled",44,1,0,0,"White","","Female","",2,3,5,"Citizen",0,0,0,1,0
+"KSSTID0301",1,0,"Female","Non-disabled",53,1,0,0,"Black","","Female","",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0302",1,0,"Male","Non-disabled",33,0,0,0,"White","","Male","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0303",1,0,"Male","Non-disabled",39,0,0,0,"White","","Male","",2,3,5,"Citizen",1,0,0,1,0
+"KSSTID0304",0,0,"Female","Non-disabled",49,1,0,0,"Black","","Female","",1,0,1,"Citizen",1,0,0,0,1
+"KSSTID0305",0,1,"Female","Cognitive Disabilities",49,1,1,1,"Black","","Female","",1,0,1,"Citizen",0,0,1,0,0
+"KSSTID0306",0,0,"Female","Non-disabled",56,1,0,0,"Black","","Female","",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0307",1,0,"Female","Physically disabled",42,1,1,0,"Other","","Female","Divorced",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0308",0,0,"Female","Non-disabled",36,1,0,0,"White","","Female","Name",1,4,5,"Citizen",1,0,1,0,0
+"KSSTID0309",0,0,"Male","Non-disabled",51,0,0,0,"White","","Male","",3,0,3,"Citizen",1,0,0,0,1
+"KSSTID0310",1,0,"Male","Non-disabled",56,0,0,0,"White","","Male","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0311",1,0,"Male","Non-disabled",43,0,0,0,"White","","Male","",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0312",0,1,"Male","Non-disabled",34,0,0,0,"Multi","","Male","",1,3,4,"Citizen",0,0,0,1,0
+"KSSTID0313",1,1,"Male","Non-disabled",43,0,0,0,"Asian","","Male","Single",1,0,1,"Eligible Citizenship",0,0,1,0,0
+"KSSTID0314",0,0,"Female","Non-disabled",41,1,0,0,"Black","","Female","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0315",0,0,"Female","Non-disabled",41,1,0,0,"White","","Female","",2,2,4,"Citizen",1,0,0,0,1
+"KSSTID0316",0,0,"Female","Non-disabled",63,1,0,0,"White","","Female","",3,0,3,"Citizen",1,0,0,1,0
+"KSSTID0317",0,0,"Male","Non-disabled",41,0,0,0,"White","","Male","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0318",1,0,"Female","Non-disabled",47,1,0,0,"White","","Female","",2,2,4,"Citizen",1,0,0,0,1
+"KSSTID0319",0,0,"Female","Non-disabled",37,1,0,0,"White","","Female","",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0320",1,0,"Female","Non-disabled",34,1,0,0,"White","","Female","",1,1,2,"Citizen",1,1,0,0,0
+"KSSTID0321",1,0,"Male","Non-disabled",42,0,0,0,"White","","Male","",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0322",1,1,"Female","Non-disabled",59,1,0,0,"White","","Female","",1,0,1,"Citizen",0,0,0,0,1
+"KSSTID0323",0,0,"Female","Non-disabled",46,1,0,0,"White","","Female","",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0324",1,1,"Male","Non-disabled",50,0,0,0,"White","","Male","",1,0,1,"Citizen",0,0,0,1,0
+"KSSTID0325",0,0,"Male","Non-disabled",47,0,0,0,"White","Non-Hispanic","Male","Married",2,5,7,"Citizen",1,1,0,0,0
+"KSSTID0326",1,0,"Male","Physically disabled",47,0,1,0,"White","","Male","",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0327",0,0,"Male","Non-disabled",57,0,0,0,"Black","","Male","",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0328",1,1,"Female","Non-disabled",35,1,0,0,"White","","Female","",1,2,3,"Citizen",0,1,0,0,0
+"KSSTID0329",0,1,"Male","Non-disabled",55,0,0,0,"White","","Male","",2,2,4,"Citizen",0,0,0,1,0
+"KSSTID0330",1,0,"Male","Non-disabled",43,0,0,0,"White","","Male","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0331",0,0,"Female","Non-disabled",47,1,0,0,"Native","","Female","",2,1,3,"Citizen",1,0,0,1,0
+"KSSTID0332",1,0,"Male","Non-disabled",33,0,0,0,"White","","Male","",1,0,1,"Citizen",1,0,1,0,0
+"KSSTID0333",0,0,"Female","Non-disabled",34,1,0,0,"White","","Female","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0334",1,0,"Male","Non-disabled",36,0,0,0,"White","","Male","",2,3,5,"Citizen",1,0,1,0,0
+"KSSTID0335",0,0,"Female","Non-disabled",33,1,0,0,"Multi","","Female","",2,0,2,"Citizen",1,0,0,1,0
+"KSSTID0336",0,0,"Female","Non-disabled",35,1,0,0,"Multi","","Female","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0337",0,0,"Female","Physically disabled",60,1,1,0,"White","","Female","",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0338",0,0,"Female","Non-disabled",43,1,0,0,"White","","Female","",1,4,5,"Citizen",1,0,0,1,0
+"KSSTID0339",0,0,"Female","Non-disabled",50,1,0,1,"White","","Female","",1,2,3,"Citizen",1,0,0,1,0
+"KSSTID0340",1,0,"Male","Non-disabled",43,0,0,0,"White","","Male","",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0341",1,0,"Female","Non-disabled",26,1,0,0,"Asian","","Female","Single",1,0,1,"Citizen",1,0,0,1,0
+"KSSTID0342",1,0,"Female","Physically disabled",50,1,1,0,"White","","Female","",1,1,2,"Citizen",1,0,0,0,1
+"KSSTID0343",1,1,"Male","Non-disabled",38,0,0,0,"White","","Male","",1,0,1,"Citizen",0,1,0,0,0
+"KSSTID0344",1,0,"Male","Non-disabled",66,0,0,1,"White","","Male","",1,0,1,"Citizen",1,1,0,0,0
+"KSSTID0345",1,0,"Female","Non-disabled",36,1,0,0,"Other","","Female","Single",1,1,2,"Citizen",1,0,0,1,0
+"KSSTID0346",1,1,"Female","Non-disabled",27,1,0,0,"White","","Female","",2,0,2,"Citizen",0,0,1,0,0
+"KSSTID0347",1,0,"Male","Non-disabled",41,0,0,0,"White","","Male","",1,1,2,"Citizen",1,0,0,1,0

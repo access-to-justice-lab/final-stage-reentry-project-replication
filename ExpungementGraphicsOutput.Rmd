@@ -1,0 +1,2132 @@
+---
+title: "Expungement Study Graphics Output"
+author: "A2J Lab"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 3
+    number_sections: true
+    theme: lumen
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+# apologies, not all of these get used, there were a number of iterations of this document, and I will pare this down eventually
+
+library(DBI)
+library(RSQLite)
+library(AER)
+library(sandwich)
+library(lmtest)
+library(car)
+library(dplyr)
+library(tidyr)
+library(stargazer)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(openintro)
+library(gdata)
+library(doBy)
+library(plm)
+library(pglm)
+library(lme4)
+library(coin)
+library(survival)
+library(survminer)
+library(zoo)
+library(purrr)
+library(mice)
+library(RStata)
+library(lubridate)
+
+  # turn off scientific notation except for big numbers
+  options(scipen = 9)
+  # set larger font size for qplot (default is 12)
+  theme_set(theme_gray(base_size = 18))
+  
+title.flag = TRUE
+m=10
+```
+
+```{r data-import}
+
+data <- read.csv("./ExpungementSurveyData.csv")
+data.admin <- read.csv("./ExpungementAdminData.csv")
+data.intake <- read.csv("./ExpungementIntakeData.csv")
+kls <- read.csv("./ExpungementInstrumentData.csv")
+
+```
+
+# Balance of Covariates
+
+## Race
+
+```{r raceBoC}
+data.intake$Race[data.intake$Race=='Multi'] <- 'Other'
+race<-as.data.frame(prop.table(table(data.intake$Race)))
+colnames(race)<-c('Group', 'Count')
+
+plot.race<-ggplot(race, aes(x="", y=Count, fill=Group)) +
+  geom_bar(width = 1, stat= 'identity') +
+  coord_polar("y", start=0) + 
+  labs(title='Overall Distribution of Race') +
+  scale_fill_grey(name='Racial\nCategory', labels=paste(race$Group,'- ', round(race$Count*100,2), '%', sep="")) + theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x=element_blank(), 
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank())
+
+race.t<-as.data.frame(prop.table(table(data.intake$Race[data.intake$Treatment==1])))
+colnames(race.t)<-c('Group', 'Count')
+
+plot.race.t<-ggplot(race.t, aes(x="", y=Count, fill=Group)) +
+  geom_bar(width = 1, stat= 'identity') +
+  coord_polar("y", start=0) + 
+  labs(title='Legal Representation') +
+  scale_fill_brewer(name='Racial\nCategory', palette='Blues', labels=paste(race.t$Group,'- ', round(race.t$Count*100,2), '%', sep="")) + theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x=element_blank(), 
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank())
+
+race.c<-as.data.frame(prop.table(table(data.intake$Race[data.intake$Treatment==0])))
+colnames(race.c)<-c('Group', 'Count')
+
+plot.race.c<-ggplot(race.c, aes(x="", y=Count, fill=Group)) +
+  geom_bar(width = 1, stat= 'identity') +
+  coord_polar("y", start=0) + 
+  labs(title='Self-Help') +
+  scale_fill_brewer(name='Racial\nCategory', palette='Reds', labels=paste(race.c$Group,'- ', round(race.c$Count*100,2), '%', sep="")) + theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x=element_blank(), 
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank())
+
+grid.arrange(plot.race, arrangeGrob(plot.race.c, plot.race.t, nrow=1), nrow=2, bottom = textGrob(paste0('p-value: ', round(pvalue(independence_test(as.factor(Race) ~ Treatment, data=data.intake))[1], 3)),gp=gpar(fontsize=8)))
+
+```
+
+## Gender
+
+```{r genderBoC}
+gender<-as.data.frame(prop.table(table(data.intake$Gender)))
+colnames(gender)<-c('Group', 'Count')
+
+plot.gender<-ggplot(gender, aes(x="", y=Count, fill=Group)) +
+  geom_bar(width = 1, stat= 'identity') +
+  coord_polar("y", start=0) + 
+  labs(title='Overall Distribution of Gender') +
+  scale_fill_grey(name='Gender\nCategory', labels=paste(gender$Group,'- ', round(gender$Count*100,2), '%', sep="")) + theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x=element_blank(), 
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank())
+
+gender.t<-as.data.frame(prop.table(table(data.intake$Gender[data.intake$Treatment==1])))
+colnames(gender.t)<-c('Group', 'Count')
+
+plot.gender.t<-ggplot(gender.t, aes(x="", y=Count, fill=Group)) +
+  geom_bar(width = 1, stat= 'identity') +
+  coord_polar("y", start=0) + 
+  labs(title='Legal Representation') +
+  scale_fill_manual(name='Gender\nCategory', values=c('darkblue', 'lightblue'), labels=paste(gender.t$Group,'- ', round(gender.t$Count*100,2), '%', sep="")) + theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x=element_blank(), 
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank())
+
+gender.c<-as.data.frame(prop.table(table(data.intake$Gender[data.intake$Treatment==0])))
+colnames(gender.c)<-c('Group', 'Count')
+
+plot.gender.c<-ggplot(gender.c, aes(x="", y=Count, fill=Group)) +
+  geom_bar(width = 1, stat= 'identity') +
+  coord_polar("y", start=0) + 
+  labs(title='Self-Help') +
+  scale_fill_manual(name='Gender\nCategory', values=c('darkred', 'salmon'), labels=paste(gender.c$Group,'- ', round(gender.c$Count*100,2), '%', sep="")) + theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x=element_blank(), 
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank())
+
+grid.arrange(plot.gender, arrangeGrob(plot.gender.c, plot.gender.t, nrow=1), nrow=2,
+             bottom = textGrob(paste0('p-value: ', round(pvalue(independence_test(as.factor(Gender) ~ Treatment, data=data.intake))[1], 3)),gp=gpar(fontsize=8)))
+
+```
+
+## Age
+
+```{r ageBoC}
+data.intake$Age <- data.intake$age
+data.intake$Z <- data.intake$Treatment
+
+age.o.plot<-ggplot(data.intake, aes(Age)) + 
+  geom_histogram(binwidth=5, col='black', alpha=.2) +
+  geom_vline(xintercept=median(data.intake$Age)) +
+  labs(title='Overall Distribution', y='Number of Cases', caption= paste('Median Age: ', floor(median(data.intake$Age)))) +
+  theme_bw(base_size=12) +
+  theme(axis.title.x = element_blank())
+
+age.s.plot<-ggplot(data.intake, aes(x=Age, group=Z)) +
+  geom_histogram(aes(x=Age, y=5*after_stat(density), group=Z, fill=factor(Z)), binwidth=5, alpha=.2, position='identity') +
+  geom_vline(xintercept=mean(data.intake$Age[data.intake$Z == 0]), col='red') +
+  geom_vline(xintercept=mean(data.intake$Age[data.intake$Z == 1]), col='blue') +
+  scale_fill_manual(values=c('red', 'blue'), name='Treatment\nGroup', labels=c('Self-Help', 'Legal Representation')) +
+  scale_y_continuous(labels=scales::percent) +
+  labs(title='Distribution by Treatment Group', x='Age at Enrollment', y='Percentage of Cases', 
+       caption=paste('Mean Age (SH|LR): ', round(mean(data.intake$Age[data.intake$Z == 0], na.rm=TRUE),1),
+                     '|', round(mean(data.intake$Age[data.intake$Z == 1], na.rm=TRUE),1),
+                     ';\t', 'p-value: ', round(pvalue(independence_test(as.factor(Age) ~ Z, data=data.intake))[1], 3))) +
+  theme_bw(base_size=12)
+
+grid.arrange(age.o.plot, age.s.plot, nrow=2,
+             top = textGrob(ifelse(title.flag, 'Study Participant Age Distributions at Enrollment', '')))
+
+```
+
+## Marital Status
+
+```{r marriedBoC}
+
+data.intake$Married <- 0
+data.intake$Married[data.intake$MaritalStatus %in% c('Married', 'Common')] <- 1
+
+married <- data.frame(Group = factor(c('Overall', 'Self-Help', 'Legal Representation'), levels=c('Overall', 'Self-Help', 'Legal Representation')),
+                      props = c(mean(data.intake$Married),
+                                mean(data.intake$Married[data.intake$Z==0]),
+                                mean(data.intake$Married[data.intake$Z==1])))
+
+ggplot(married, aes(x=Group, y=props)) +
+  geom_bar(stat='identity', alpha=.85) +
+  geom_text(label=round(married$props,3), vjust=1.5, color='white') +
+  labs(title=ifelse(title.flag,'Proportion of Married Participants by Treatment Group',''),
+       caption=paste('p-value: ', round(pvalue(independence_test(Married ~ Z, data=data.intake)),3))) +
+  xlab('Treatment Group') +
+  ylab('Proportion of Study Participants who are Married') +
+  theme_bw()
+
+```
+
+## Employment at Enrollment
+
+```{r employmentBoC}
+
+data.admin$Employed <- -1 * data.admin$Unemployed + 1
+data.intake$Employed <- -1 * data.intake$QID2 + 1
+
+employ.data <- data.frame(Comparison = rep(factor(c('AdminPre', 'AdminAt', 'Survey'), levels=c('AdminPre', 'AdminAt', 'Survey')),each=2),
+                         Group = rep(c(0,1),3),
+                         Employment = c(mean(data.admin$Employed[data.admin$Seq==-1 & data.admin$Treatment==0]),
+                                        mean(data.admin$Employed[data.admin$Seq==-1 & data.admin$Treatment==1]),
+                                        mean(data.admin$Employed[data.admin$Seq==0 & data.admin$Treatment==0]),
+                                        mean(data.admin$Employed[data.admin$Seq==0 & data.admin$Treatment==1],na.rm=TRUE),
+                                        mean(data.intake$Employed[data.intake$Treatment==0],na.rm=TRUE),
+                                        mean(data.intake$Employed[data.intake$Treatment==1])))
+
+employ.pvalues <- paste(round(c(t.test(Employed ~ Treatment, data=data.admin[data.admin$Seq==-1,])$p.value,
+                                t.test(Employed ~ Treatment, data=data.admin[data.admin$Seq==0,])$p.value,
+                                t.test(Employed ~ Treatment, data=data.intake)$p.value), 3), collapse="   ")
+
+ggplot(employ.data, aes(x=Comparison, y=Employment, fill=factor(Group))) +
+  geom_bar(stat='identity', position=position_dodge(), alpha=.75) +
+  geom_text(aes(label=round(Employment,2)), vjust=3.75, color='white', size=3, position=position_dodge(1)) +
+  scale_y_continuous(name='Employment Rate',
+                     limits=c(0,1),
+                     breaks=c(0,.2,.4,.6,.8,1),
+                     labels=c(0,.2,.4,.6,.8,1)) +
+  scale_x_discrete(name='Comparison Point',
+                   breaks=c('AdminPre', 'AdminAt', 'Survey'),
+                   labels=c('Pre-Enrollment\nQuarter', 'Enrollment\nQuarter', 'Intake\nSurvey')) +
+  scale_fill_manual(name='Treatment Group',
+                    breaks=c(0,1),
+                    labels=c('Self-Help', 'Legal Representation'),
+                    values=c('red', 'blue')) +
+  labs(title=ifelse(title.flag,'Employment Rates of Study Participants at Different Comparison Points\n by Treatment Condition',""),
+       caption=paste0('p-values: ', employ.pvalues)) +
+  theme_bw()
+
+
+```
+
+# Instrument Strength (Time to Expungement)
+
+## KLS Data
+
+```{r instrumentTime}
+
+# Graph 1- Mean Days to Expungement for Successful Participants
+expungeTime <- data.frame(value=c(mean(kls$timeToExpunge[kls$Treatment==0 & kls$KLSSuccess=='yes'], na.rm=TRUE), mean(kls$timeToExpunge[kls$Treatment==1 & kls$KLSSuccess=='yes'], na.rm=TRUE)),
+                          treatment=c('Self-Help', 'Legal Representation'))
+
+ggplot(expungeTime, aes(x=factor(treatment, level=c('Self-Help', 'Legal Representation')), y=value)) +
+  geom_bar(stat='identity', position=position_dodge(), alpha=.75) +
+  geom_text(aes(label=round(value,2)), vjust=3.75, color='white', size=3, position=position_dodge(1)) +
+  scale_y_continuous(name='Mean Number of Days Until Expungement',
+                     limits=c(0,1250),
+                     breaks=c(0, 250, 500, 750, 1000, 1250)) +
+  scale_x_discrete(name='Treatment Condition',
+                   breaks=c('Self-Help', 'Legal Representation')) +
+  labs(title='Mean Number of Days until Expungement by Treatment Group\nfor Successful Participants') +
+  theme_bw()
+
+# Graph 2- Mean Days for Successful Participants within 2 Years
+expungeTime <- data.frame(value=c(mean(kls$cenExpungeTime[kls$Treatment==0 & kls$cenKLSSuccess=='yes'], na.rm=TRUE), mean(kls$cenExpungeTime[kls$Treatment==1 & kls$cenKLSSuccess=='yes'], na.rm=TRUE)),
+                          treatment=c('Self-Help', 'Legal Representation'))
+
+ggplot(expungeTime, aes(x=factor(treatment, level=c('Self-Help', 'Legal Representation')), y=value)) +
+  geom_bar(stat='identity', position=position_dodge(), alpha=.75) +
+  geom_text(aes(label=round(value,2)), vjust=3.75, color='white', size=3, position=position_dodge(1)) +
+  scale_y_continuous(name='Mean Number of Days Until Expungement',
+                     limits=c(0,750),
+                     breaks=c(0, 250, 500, 750)) +
+  scale_x_discrete(name='Treatment Condition',
+                   breaks=c('Self-Help', 'Legal Representation')) +
+  labs(title='Mean Number of Days until Expungement by Treatment Group\nfor Participants That Were Successful Within 2 Years') +
+  theme_bw()
+
+
+# Graph 3- Success Rates within 2 Years
+filingData <- kls %>% filter(cenKLSSuccess != "")
+filingData$fullExpunge <- ifelse(filingData$cenKLSSuccess == 'yes', 1, 0)
+
+filingGraphData3 <- data.frame(Treatment=factor(c(0,1)),
+                              Filing.Rate=c(mean(filingData$fullExpunge[filingData$Treatment==0], na.rm=TRUE),
+                                            mean(filingData$fullExpunge[filingData$Treatment==1], na.rm=TRUE)))
+
+ggplot(filingGraphData3, aes(x=Treatment, y=Filing.Rate)) +
+  geom_bar(stat='identity', position=position_dodge(), alpha=.75) +
+  geom_text(aes(label=round(Filing.Rate,2)), vjust=-2.75, color='black', size=3, position=position_dodge(1)) +
+  scale_y_continuous(name='All Cases Expunged',
+                     limits=c(0,1),
+                     breaks=c(0,.2,.4,.6,.8,1),
+                     labels=c(0,.2,.4,.6,.8,1)) +
+  scale_x_discrete(name='Treatment Condition',
+                   breaks=c(0,1),
+                   labels=c('Self-Help', 'Legal Representation')) +
+  labs(title='Rate of Study Participants with Successful Full Expungement\nWithin 2 Years As Determined by KLS by Treatment Condition',
+       subtitle=paste('Number of Participants with Records Issues:',as.character(nrow(kls) - nrow(filingData))),
+       caption=paste('p-value: p=',as.character(round(pvalue(independence_test(fullExpunge~Treatment,data=filingData)), 3)))) +
+  theme_bw()
+
+```
+
+## Survival Curves
+
+```{r survCurve}
+
+kls$success <- ifelse(kls$KLSSuccess=='yes', 1, 0)
+kls$fail <- ifelse(kls$KLSSuccess=='yes' | kls$KLSSuccess=='partial', 1, 0)
+kls$successAlt <- ifelse(kls$cenKLSSuccess=='yes', 1, 0)
+
+sfit <- survfit(Surv(timeToExpunge, success) ~ Treatment, data = kls)
+sfitAlt <- survfit(Surv(cenExpungeTime, successAlt) ~ Treatment, data = kls)
+
+ggsurvplot(sfit, data=kls,
+           palette = c('red', 'blue'),
+           conf.int = TRUE,
+           pval = TRUE,
+           pval.size = 3,
+           pval.coord = c(0,0),
+           legend.title = 'Treatment Group',
+           legend.labs = c('Self Help', 'Legal Services'),
+           title=ifelse(title.flag,"Survival Curves for KLS Unsuccessful Determination by Treatment Group",""),
+           xlab="Time From Enrollment (Days)",
+           ylab="Probability of Having At Least One KLS Identified\nExpungeable Case on Record",
+           ggtheme = theme_bw()) 
+
+ggsurvplot(sfitAlt, data=kls,
+           palette = c('red', 'blue'),
+           conf.int = TRUE,
+           pval = TRUE,
+           pval.size = 3,
+           pval.coord = c(0,0),
+           legend.title = 'Treatment Group',
+           legend.labs = c('Self Help', 'Legal Services'),
+           title=ifelse(title.flag,"Survival Curves for KLS Unsuccessful Determination\nAfter 2 Years by Treatment Group",""),
+           xlab="Time From Enrollment (Days)",
+           ylab="Probability of Having At Least One KLS Identified\nExpungeable Case Expunged",
+           ggtheme = theme_bw())
+
+kls_dates <- filter(kls, !is.na(kls$lastCheckDate))
+dates <- seq(as.Date("2019-08-01"), as.Date("2024-12-01"), by= "1 month")
+counts <- c(sapply(dates, FUN=function(date){sum(kls_dates$RandDate<=date & kls_dates$Treatment==0, na.rm=TRUE) - sum(kls_dates$lastCheckDate<=date & kls_dates$KLSSuccess=='yes' & kls_dates$Treatment==0, na.rm=TRUE)}), 
+            sapply(dates, FUN=function(date){sum(kls_dates$RandDate<=date & kls_dates$Treatment==1, na.rm=TRUE) - sum(kls_dates$lastCheckDate<=date & kls_dates$KLSSuccess=='yes' & kls_dates$Treatment==1, na.rm=TRUE)}))
+ee_surv <- data.frame(dates = c(dates, dates),
+                      counts = counts,
+                      treatment = c(rep('Self-Help',length(dates)), rep('Legal Representation', length(dates))))
+ee_surv$props <- ee_surv$counts/sum(kls_dates$Treatment == 1) * ifelse(ee_surv$treatment=='Legal Representation', 1, 0) + ee_surv$counts/sum(kls_dates$Treatment==0) * ifelse(ee_surv$treatment=='Self-Help',1, 0)
+
+ggplot(ee_surv, aes(x=dates, y=counts, group=treatment, color=treatment)) +
+  geom_line() +
+  geom_vline(aes(xintercept=as.Date("2022-07-01"))) +
+  scale_color_manual(name='Treatment Group',
+                     breaks=c('Self-Help', 'Legal Representation'),
+                     values=c('red', 'blue')) +
+  scale_y_continuous(name='Number of Participants With Expungeable Records') +
+  scale_x_date(name='Date',
+               breaks=seq(as.Date('2019-08-01'), as.Date('2024-12-01'), by='6 months'),
+               labels=c('08-19', '02-20', '08-20', '02-21', '08-21', '02-22', '08-22', '02-23', '08-23', '02-24', '08-24')) +
+  labs(title=ifelse(title.flag,'Number of Participants with Expungeable Records\nOver Time By Treatment Group',""),
+       caption='Vertical Line is End of Enrollment: 2022-06-23') +
+  theme_bw()
+
+ggplot(ee_surv, aes(x=dates, y=props, group=treatment, color=treatment)) +
+  geom_line() +
+  geom_vline(aes(xintercept=as.Date("2022-07-01"))) +
+  scale_color_manual(name='Treatment Group',
+                     breaks=c('Self-Help', 'Legal Representation'),
+                     values=c('red', 'blue')) +
+  scale_y_continuous(name='Proportion of Treatment Group With Expungeable Records') +
+  scale_x_date(name='Date',
+               breaks=seq(as.Date('2019-08-01'), as.Date('2024-12-01'), by='6 months'),
+               labels=c('08-19', '02-20', '08-20', '02-21', '08-21', '02-22', '08-22', '02-23', '08-23', '02-24', '08-24')) +
+  labs(title=ifelse(title.flag,'Proportion of Participants with Expungeable Records\nOver Time By Treatment Group',""),
+       caption='Vertical Line is End of Enrollment: 2022-06-23') +
+  theme_bw()
+
+```
+
+# Treatment Effects and Predicted Probabilities Graphs
+
+## Expungement Status by Survey Quarter
+
+```{r expungeSurveyQuarter}
+
+expungeQ.data <- aggregate(expunge ~ Treatment + Seq, data=data, FUN="mean")
+expungeQ.data$Seq <- factor(expungeQ.data$Seq)
+expungeQ.data$Treatment <- factor(expungeQ.data$Treatment)
+
+expungeQ.graph <- ggplot(expungeQ.data, aes(x=Seq, y=expunge, fill=Treatment)) +
+  geom_bar(stat='identity', color='black', position=position_dodge(), alpha=.75) +
+  geom_text(aes(label=round(expunge,3)), vjust=-.5, size=3.75, position=position_dodge(1)) +
+  scale_y_continuous(limits=c(0,1),
+                     name='Proportion of Participants with Expunged Records') +
+  scale_x_discrete(name='Survey Response Period') +
+  scale_fill_manual(name='Treatment Group',
+                    breaks=c(0,1),
+                    values=c('red', 'blue'),
+                    labels=c('Self-Help', 'Legal Representation')) +
+  labs(title=ifelse(title.flag,'Proportion of Participants Achieving Expungement in a Particular\nSurvey Period By Treatment Group',"")) +
+  theme_bw()
+  
+expungeQ.graph
+
+expungeQCount.data <- rbind(aggregate(expunge ~ Treatment + Seq, data=data, FUN="sum"),
+                            aggregate(expunge ~ Treatment + Seq, data=data, FUN="length"))
+expungeQCount.data$Status <- c(rep('Record Expunged', 12), rep('Total', 12))
+expungeQCount.data$Seq <- factor(expungeQCount.data$Seq)
+expungeQCount.data$Treatment <- factor(expungeQCount.data$Treatment)
+
+expungeQCount.graph <- ggplot(expungeQCount.data, aes(x=Seq, y=expunge, fill=Treatment)) +
+  geom_bar(data=.%>%filter(Status=='Total'), stat='identity', color='grey', position=position_dodge(), alpha=0.1) +
+  geom_bar(data=.%>%filter(Status=='Record Expunged'), stat='identity', color='black', position=position_dodge(), alpha=.75) +
+  geom_text(aes(label=expunge), vjust=-.5, size=3.75, position=position_dodge(1)) +
+  scale_y_continuous(limits=c(0,200),
+                     name='Number of Participants with Expunged Records') +
+  scale_x_discrete(name='Survey Response Period') +
+  scale_fill_manual(name='Treatment Group',
+                    breaks=c(0,1),
+                    values=c('red', 'blue'),
+                    labels=c('Self-Help', 'Legal Representation')) +
+  labs(title=ifelse(title.flag,'Number of Participants with Record Expungement \nPer Survey Period By Treatment Group',"")) +
+  theme_bw()
+
+expungeQCount.graph
+
+```
+
+```{r rubinFunctions}
+TE.poolCS <- function(TE.data, m=10){
+  TE.return <- data.frame(Names=c('LATE', 'Record Present', 'Fully Expunged'),
+                          b=c(mean(TE.data$b[TE.data$effect=='late']),
+                              mean(TE.data$b[TE.data$effect=='pr_1']),
+                              mean(TE.data$b[TE.data$effect=='pr_2'])),
+                          varW=c(sum(TE.data$se[TE.data$effect=='late']^2)/m,
+                                 sum(TE.data$se[TE.data$effect=='late']^2)/m,
+                                 sum(TE.data$se[TE.data$effect=='late']^2)/m),
+                          varB=c(sum((mean(TE.data$b[TE.data$effect=='late'])-TE.data$b[TE.data$effect=='late'])^2)/(m-1),
+                                 sum((mean(TE.data$b[TE.data$effect=='pr_1'])-TE.data$b[TE.data$effect=='pr_1'])^2)/(m-1),
+                                 sum((mean(TE.data$b[TE.data$effect=='pr_2'])-TE.data$b[TE.data$effect=='pr_2'])^2)/(m-1)))
+  
+  TE.return$se <- sqrt(TE.return$varW + TE.return$varB + TE.return$varB/m)
+  TE.return$ll <- TE.return$b - 1.96 * TE.return$se
+  TE.return$ul <- TE.return$b + 1.96 * TE.return$se
+  
+  return(TE.return)
+}
+
+TE.pool <- function(TE.data, m=10){
+  TE.return <- data.frame(Names=c('Overall', 'Quarter 1', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6'),
+                      b=c(mean(TE.data$b[TE.data$Names=='Overall']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 1']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 2']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 3']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 4']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 5']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 6'])),
+                      varW=c(sum(TE.data$se[TE.data$Names=='Overall']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 1']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 2']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 3']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 4']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 5']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 6']^2)/m),
+                      varB=c(sum((mean(TE.data$b[TE.data$Names=='Overall'])-TE.data$b[TE.data$Names=='Overall'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 1'])-TE.data$b[TE.data$Names=='Quarter 1'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 2'])-TE.data$b[TE.data$Names=='Quarter 2'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 3'])-TE.data$b[TE.data$Names=='Quarter 3'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 4'])-TE.data$b[TE.data$Names=='Quarter 4'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 5'])-TE.data$b[TE.data$Names=='Quarter 5'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 6'])-TE.data$b[TE.data$Names=='Quarter 6'])^2)/(m-1)))
+
+  TE.return$se <- sqrt(TE.return$varW + TE.return$varB + TE.return$varB/m)
+  TE.return$ll <- TE.return$b - 1.96 * TE.return$se
+  TE.return$ul <- TE.return$b + 1.96 * TE.return$se
+  
+  return(TE.return)
+}
+
+TE.pool2 <- function(TE.data, m=10){
+  TE.return <- data.frame(Names=c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6'),
+                      b=c(mean(TE.data$b[TE.data$Names=='Overall']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 2']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 3']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 4']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 5']),
+                          mean(TE.data$b[TE.data$Names=='Quarter 6'])),
+                      varW=c(sum(TE.data$se[TE.data$Names=='Overall']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 2']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 3']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 4']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 5']^2)/m,
+                             sum(TE.data$se[TE.data$Names=='Quarter 6']^2)/m),
+                      varB=c(sum((mean(TE.data$b[TE.data$Names=='Overall'])-TE.data$b[TE.data$Names=='Overall'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 2'])-TE.data$b[TE.data$Names=='Quarter 2'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 3'])-TE.data$b[TE.data$Names=='Quarter 3'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 4'])-TE.data$b[TE.data$Names=='Quarter 4'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 5'])-TE.data$b[TE.data$Names=='Quarter 5'])^2)/(m-1),
+                             sum((mean(TE.data$b[TE.data$Names=='Quarter 6'])-TE.data$b[TE.data$Names=='Quarter 6'])^2)/(m-1)))
+
+  TE.return$se <- sqrt(TE.return$varW + TE.return$varB + TE.return$varB/m)
+  TE.return$ll <- TE.return$b - 1.96 * TE.return$se
+  TE.return$ul <- TE.return$b + 1.96 * TE.return$se
+  
+  return(TE.return)
+}
+
+probs.pool <- function(probs.data, m=10) {
+  probs.return <- data.frame(Expungement=rep(c(0,1),each=6),
+                             Sequence=rep(c(1:6),2),
+                             b=c(mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==1]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==2]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==3]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==4]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==5]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==6]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==1]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==2]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==3]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==4]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==5]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==6])),
+                             varW=c(sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==1]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==2]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==3]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==4]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==5]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==6]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==1]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==2]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==3]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==4]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==5]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==6]^2)/m),
+                             varB=c(sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==1])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==1])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==2])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==2])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==3])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==3])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==4])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==4])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==5])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==5])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==6])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==6])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==1])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==1])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==2])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==2])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==3])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==3])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==4])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==4])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==5])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==5])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==6])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==6])^2)/(m-1)))
+
+  probs.return$se <- sqrt(probs.return$varW + probs.return$varB + probs.return$varB/m)
+  probs.return$ll <- probs.return$b - 1.96 * probs.return$se
+  probs.return$ul <- probs.return$b + 1.96 * probs.return$se
+  
+  return(probs.return)
+}
+
+probs.pool2 <- function(probs.data, m=10) {
+  probs.return <- data.frame(Expungement=rep(c(0,1),each=5),
+                             Sequence=rep(c(1:5),2),
+                             b=c(mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==1]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==2]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==3]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==4]),
+                                 mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==5]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==1]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==2]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==3]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==4]),
+                                 mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==5])),
+                             varW=c(sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==1]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==2]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==3]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==4]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==0 & probs.data$Sequence==5]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==1]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==2]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==3]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==4]^2)/m,
+                                    sum(probs.data$se[probs.data$Expungement==1 & probs.data$Sequence==5]^2)/m),
+                             varB=c(sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==1])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==1])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==2])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==2])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==3])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==3])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==4])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==4])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==5])-probs.data$b[probs.data$Expungement==0 & probs.data$Sequence==5])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==1])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==1])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==2])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==2])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==3])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==3])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==4])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==4])^2)/(m-1),
+                                    sum((mean(probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==5])-probs.data$b[probs.data$Expungement==1 & probs.data$Sequence==5])^2)/(m-1)))
+
+  probs.return$se <- sqrt(probs.return$varW + probs.return$varB + probs.return$varB/m)
+  probs.return$ll <- probs.return$b - 1.96 * probs.return$se
+  probs.return$ul <- probs.return$b + 1.96 * probs.return$se
+  
+  return(probs.return)
+}
+
+```
+
+```{r probFunctions}
+
+probll <-  function(p, se) {
+  logitp <- log(p/(1-p))
+  logitse <- se/(p*(1-p))
+  
+  logitci <- logitp - 1.96 * logitse
+  
+  ci <- exp(logitci) / (1 + exp(logitci))
+  
+  return(ci)
+}
+
+probul <- function(p, se) {
+  logitp <- log(p/(1-p))
+  logitse <- se/(p*(1-p))
+  
+  logitci <- logitp + 1.96 * logitse
+  
+  ci <- exp(logitci) / (1 + exp(logitci))
+  
+  return(ci)
+}
+```
+
+```{r graphicsFunctions}
+
+TE.graphic <- function(TE.data, textSize=4, lim=.3, llim=FALSE, vjust=-1, title.flag=TRUE, title="", x.name='Survey Period (100 Days)', y.name='Treatment Effect Estimate Size (ATE)', pvalues=""){
+  
+  if(pvalues==""){
+    pval = paste(round(TE.data$pvalue[TE.data$effect=="Expunge"],3),
+                                           round(TE.data$pvalue[TE.data$effect=="Sequence"],3),
+                                           round(TE.data$pvalue[TE.data$effect=="TE"],3),
+                                           round(TE.data$pvalue[TE.data$effect=="late"],3),sep=" | ")
+  } else {
+    pval = pvalues
+  }
+  
+  ggplot(TE.data, aes(x=Names, y=b)) +
+    geom_point() +
+    geom_text(aes(y=ul, label=round(b, 4)), vjust=vjust, size=textSize) +
+    geom_hline(yintercept=0) +
+    geom_errorbar(aes(ymin=ll, ymax=ul)) +
+    scale_y_continuous(limits=c(ifelse(llim,llim,-1*lim), lim),
+                     name=y.name) +
+    scale_x_discrete(name=x.name) +
+    labs(title=ifelse(title.flag,title,""),
+         caption=paste('p-values: ', pval)) +
+    theme_bw()
+  
+}
+
+probs.graphic <- function(probs.data, lim=1, colors=c('red', 'blue'), title.flag=TRUE, title="", periods=6, survey=TRUE) {
+  
+  ggplot(probs.data, aes(x=Sequence, group=Expungement)) +
+    geom_line(aes(y=b, color=Expungement)) +
+    geom_line(aes(y=ll, color=Expungement), linetype='dashed') +
+    geom_line(aes(y=ul, color=Expungement), linetype='dashed') +
+    geom_ribbon(aes(ymin=ll, ymax=ul, fill=Expungement), alpha=0.2, show.legend = FALSE) +
+    scale_y_continuous(name='Predicted Probabilities',
+                       limits=c(0,lim)) +
+    scale_x_continuous(name=ifelse(survey, 'Survey Period (100 Days)', 'Admin Period (Quarter)'),
+                     breaks=c(1:(nrow(probs.data)/2)),
+                     labels=c((periods-nrow(probs.data)/2+1):periods)) +
+    scale_color_manual(name='Expungement Status',
+                       labels=c('No Expungement', 'Expungement'),
+                       values=colors) +
+    scale_fill_manual(values=colors) +
+    labs(title=ifelse(title.flag,title,"")) +
+    theme_bw()
+  
+}
+
+cont.graphic <- function(cont.data, lim=100, llim=0, colors=c('red', 'blue'), y.title="Units", title.flag=TRUE, title="", periods=6, survey=TRUE) {
+  ggplot(probs.data, aes(x=Sequence, group=Expungement)) +
+    geom_line(aes(y=b, color=Expungement)) +
+    geom_line(aes(y=ll, color=Expungement), linetype='dashed') +
+    geom_line(aes(y=ul, color=Expungement), linetype='dashed') +
+    geom_ribbon(aes(ymin=ll, ymax=ul, fill=Expungement), alpha=0.2, show.legend = FALSE) +
+    geom_hline(yintercept=0) +
+    scale_y_continuous(name=y.title,
+                       limits=c(llim,lim)) +
+    scale_x_continuous(name=ifelse(survey, 'Survey Period (100 Days)', 'Admin Period (Quarter)'),
+                     breaks=c(1:(nrow(probs.data)/2)),
+                     labels=c((periods-nrow(probs.data)/2+1):periods)) +
+    scale_color_manual(name='Expungement Status',
+                       labels=c('No Expungement', 'Expungement'),
+                       values=colors) +
+    scale_fill_manual(values=colors) +
+    labs(title=ifelse(title.flag,title,"")) +
+    theme_bw()
+}
+
+```
+
+## Administrative Data Based Outcomes
+
+### Unemployment
+
+***Bivariate Probit***
+
+```{r unemployedAdminBPBoot-Graphics}
+TE.data <- read.csv('./Stata Files/unemployedAdminTE.csv')
+probs.data <- read.csv('./Stata Files/unemployedAdmin_bootstrapped_effects.csv')
+
+TE.data <- rbind(TE.data, probs.data[probs.data$effect=='late',c('effect', 'b', 'se', 'pvalue', 'll', 'ul')])
+TE.data$Names = factor(c('Expunge', 'Quarter', 'Expunge x\nQuarter', 'ATE'),
+                       levels=c('Expunge', 'Quarter', 'Expunge x\nQuarter', 'ATE'))
+TE.data <- TE.data %>% filter(!effect == "")
+
+lates.data <- probs.data %>% filter(expunge == 'LATE' & seq != 'Overall' & !effect=="")
+lates.data$Expungement <- lates.data$expunge
+lates.data$Sequence <- as.integer(lates.data$seq)
+
+probs.data <- probs.data %>% filter(!expunge == 'LATE' & !effect == "")
+probs.data$Expungement <- probs.data$expunge
+probs.data$Sequence <- as.integer(probs.data$seq)
+probs.data <- probs.data %>%
+  rowwise() %>%
+  mutate(ll = probll(b, se),
+         ul = probul(b, se)) %>%
+  ungroup()
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5,
+                       lim=1,
+                       title.flag=title.flag,
+                       title="Unemployment Model Effect Estimates Including ATE with 95% CI",
+                       x.name="Estimate",
+                       y.name="Effect Estimate Size")
+
+probs.graph <- probs.graphic(probs.data,
+                             lim=.65,
+                             colors=c('red', 'blue'),
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Experiencing Quarterly\nUnemployment by Expungement Status',
+                             periods=7,
+                             survey=FALSE)
+
+lates.graph <- ggplot(lates.data, aes(x=Sequence, y=b)) +
+  geom_point() +
+  geom_text(aes(y=ul, label=round(b, 4)), vjust=-1, size=3) +
+  geom_hline(yintercept=0) +
+  geom_errorbar(aes(ymin=ll, ymax=ul)) +
+  scale_y_continuous(limits=c(-0.03, 0.015),
+                     name='Treatment Effect Estimate Size (ATE)') +
+  scale_x_continuous(name='Admin Period (Quarter)',
+                   breaks=c(1:7),
+                   labels=c(1:7)) +
+  labs(title=ifelse(title.flag, 'Predicted Change in Probability of Unemployment by Quarter when Record is Expunged', ""),
+       caption=paste('p-values: ', paste(round(lates.data$pvalue,3),collapse=" | "))) +
+  theme_bw()
+
+TE.graph
+
+lates.graph
+
+probs.graph
+
+```
+
+***Linear Probability Model***
+
+```{r unemployedAdminIV-Graphics}
+#TE.data <- read.csv('./Stata Files/unemployedAdminLPMTE.csv')
+probs.data <- read.csv('./Stata Files/unemployedAdminLPM_Meffects.csv')
+
+#TE.data <- rbind(TE.data, probs.data[probs.data$effect=='late',c('effect', 'b', 'se', 'pvalue', 'll', 'ul')])
+#TE.data$Names = factor(c('Expunge', 'Expunge x\nQuarter', 'Quarter', 'LATE'),
+                       #levels=c('Expunge', 'Quarter', 'Expunge x\nQuarter', 'LATE'))
+#TE.data$b <- TE.data$b %>% round(2)
+lates.data <- probs.data %>% filter(expunge == 'LATE' & seq != 'Overall' & !effect=="" & seq != 0)
+
+lates.data$Expungement <- lates.data$expunge
+lates.data$Sequence <- as.integer(lates.data$seq)
+
+probs.data <- probs.data %>% filter(!expunge == 'LATE' & !effect=="")
+probs.data$Expungement <- probs.data$expunge
+probs.data$Sequence <- as.integer(probs.data$seq)
+
+#Establish upper and lower probability limits
+probs.data$ll[probs.data$ll<0] <- 0
+probs.data$ul[probs.data$ul>1] <- 1
+
+#TE.graph <- TE.graphic(TE.data, 
+#                       textSize=5,
+#                       lim=16,
+#                       title.flag=title.flag,
+#                       title="Income Ratio Model Effect Estimates Including LATE with 95% CI",
+#                       x.name="Estimate",
+#                       y.name="Effect Estimate Size")
+
+probs.graph <- cont.graphic(probs.data, 
+                            lim=1,
+                            llim=0,
+                            colors=c('darkred', 'darkblue'),
+                            y.title='Predicted Quarterly Unemployment Probability',
+                            title.flag=title.flag,
+                            title='Predicted Quarterly Unemployment Probability by Expungement Status',
+                            periods=7,
+                            survey=FALSE)
+
+delta.graph <- ggplot(lates.data, aes(x=Sequence, y=b)) +
+  geom_point() +
+  geom_text(aes(y=ul, label=round(b, 4)), vjust=-1, size=3) +
+  geom_hline(yintercept=0) +
+  geom_errorbar(aes(ymin=ll, ymax=ul)) +
+  scale_y_continuous(limits=c(-1, 1),
+                     name='Treatment Effect Estimate Size (LATE)') +
+  scale_x_continuous(name='Admin Period (Quarter)',
+                   breaks=c(1:7),
+                   labels=c(1:7)) +
+  labs(title=ifelse(title.flag, 'Local Average Treatment Effect (LATE) on\nUnemployment Probability by Quarter', ""),
+       caption=paste('p-values: ', paste(round(lates.data$pvalue,3),collapse=" | "))) +
+  theme_bw()
+
+#TE.graph
+
+delta.graph
+
+probs.graph
+
+```
+
+### Income Ratio
+
+***Instrumental Variable Regression with Clustered Standard Errors***
+
+```{r incomeRAdminIV-Graphics}
+TE.data <- read.csv('./Stata Files/incomeRAdminTE.csv')
+probs.data <- read.csv('./Stata Files/incomeRAdmin_Meffects.csv')
+preds.data <- read.csv('./Stata Files/incomeRAdmin_predictions.csv')
+
+TE.data <- rbind(TE.data, probs.data[probs.data$effect=='late',c('effect', 'b', 'se', 'pvalue', 'll', 'ul')])
+TE.data$Names = factor(c('Expunge', 'Expunge x\nQuarter', 'Quarter', 'LATE'),
+                       levels=c('Expunge', 'Quarter', 'Expunge x\nQuarter', 'LATE'))
+TE.data$b <- TE.data$b %>% round(2)
+lates.data <- probs.data %>% filter(expunge == 'LATE' & seq != 'Overall' & !effect=="" & seq != 0)
+
+lates.data$Expungement <- lates.data$expunge
+lates.data$Sequence <- as.integer(lates.data$seq)
+
+probs.data <- probs.data %>% filter(!expunge == 'LATE' & !effect=="")
+probs.data$Expungement <- probs.data$expunge
+probs.data$Sequence <- as.integer(probs.data$seq)
+
+#Apply transformation on negative predictions for more realistic interpretation
+probs.data$b <- log1p(exp(probs.data$b))
+probs.data$ll <- log1p(exp(probs.data$ll))
+probs.data$ul <- log1p(exp(probs.data$ul))
+
+#Compute group-time period average outcome predictions
+preds.data <- aggregate(cbind(outcome_hat, outcome_hat_ll, outcome_hat_ul) ~ expunge + seq, preds.data, mean)
+preds.data$Expungement <- factor(preds.data$expunge)
+preds.data$Sequence <- as.integer(preds.data$seq)
+preds.data <- filter(preds.data, seq != 0)
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5,
+                       lim=16,
+                       title.flag=title.flag,
+                       title="Income Ratio Model Effect Estimates Including LATE with 95% CI",
+                       x.name="Estimate",
+                       y.name="Effect Estimate Size")
+
+probs.graph <- cont.graphic(probs.data, 
+                            lim=10,
+                            llim=0,
+                            colors=c('darkred', 'darkblue'),
+                            y.title='Predicted Quarterly Income Ratio Amount',
+                            title.flag=title.flag,
+                            title='Predicted Quarterly Income Ratio by Expungement Status',
+                            periods=7,
+                            survey=FALSE)
+
+delta.graph <- ggplot(lates.data, aes(x=Sequence, y=b)) +
+  geom_point() +
+  geom_text(aes(y=ul, label=round(b, 4)), vjust=-1, size=3) +
+  geom_hline(yintercept=0) +
+  geom_errorbar(aes(ymin=ll, ymax=ul)) +
+  scale_y_continuous(limits=c(-16, 5),
+                     name='Treatment Effect Estimate Size (LATE)') +
+  scale_x_continuous(name='Quarter',
+                   breaks=c(1:7),
+                   labels=c(1:7)) +
+  labs(title=ifelse(title.flag, 'Predicted Change in Income Ratios by Quarter when Record is Expunged', ""),
+       caption=paste('p-values: ', paste(round(lates.data$pvalue,3),collapse=" | "))) +
+  theme_bw()
+
+preds.graph <- ggplot(preds.data, aes(x=Sequence, group=Expungement)) +
+    geom_line(aes(y=outcome_hat, color=Expungement)) +
+    geom_line(aes(y=outcome_hat_ll, color=Expungement), linetype='dashed') +
+    geom_line(aes(y=outcome_hat_ul, color=Expungement), linetype='dashed') +
+    geom_ribbon(aes(ymin=outcome_hat_ll, ymax=outcome_hat_ul, fill=Expungement), alpha=0.2, show.legend = FALSE) +
+    geom_hline(yintercept=0) +
+    scale_y_continuous(name='Predicted Quarterly Income Amount',
+                       limits=c(0, 50000)) +
+    scale_x_continuous(name='Quarter',
+                     breaks=c(1:7),
+                     labels=c(1:7)) +
+    scale_color_manual(name='Expungement Status',
+                       labels=c('No Expungement', 'Expungement'),
+                       values=c('darkred', 'darkblue')) +
+    scale_fill_manual(values=c('darkred', 'darkblue')) +
+    labs(title=ifelse(title.flag,'Predicted Quarterly Income by Expungement Status',"")) +
+    theme_bw()
+
+TE.graph
+
+delta.graph
+
+probs.graph
+
+preds.graph
+
+```
+
+### Wage Ratio
+
+***Instrumental Variable Regression with Clustered Standard Errors***
+
+```{r wageRAdminIV-Graphics}
+TE.data <- read.csv('./Stata Files/wageRAdminTE.csv')
+probs.data <- read.csv('./Stata Files/wageRAdmin_Meffects.csv')
+preds.data <- read.csv('./Stata Files/wageRAdmin_predictions.csv')
+
+TE.data <- rbind(TE.data, probs.data[probs.data$effect=='late',c('effect', 'b', 'se', 'pvalue', 'll', 'ul')])
+TE.data$Names = factor(c('Expunge', 'Expunge x\nQuarter', 'Quarter', 'LATE'),
+                       levels=c('Expunge', 'Quarter', 'Expunge x\nQuarter', 'LATE'))
+TE.data$b <- TE.data$b %>% round(2)
+
+lates.data <- probs.data %>% filter(expunge == 'LATE' & seq != 'Overall' & !effect=="" & seq != 0)
+lates.data$Expungement <- lates.data$expunge
+lates.data$Sequence <- as.integer(lates.data$seq)
+
+probs.data <- probs.data %>% filter(!expunge == 'LATE' & !effect=="")
+probs.data$Expungement <- probs.data$expunge
+probs.data$Sequence <- as.integer(probs.data$seq)
+
+#Apply transformation on negative predictions for more realistic interpretation
+probs.data$b <- log1p(exp(probs.data$b))
+probs.data$ll <- log1p(exp(probs.data$ll))
+probs.data$ul <- log1p(exp(probs.data$ul))
+
+#Compute group-time period average outcome predictions
+preds.data <- aggregate(cbind(outcome_hat, outcome_hat_ll, outcome_hat_ul) ~ expunge + seq, preds.data, mean)
+preds.data$Expungement <- factor(preds.data$expunge)
+preds.data$Sequence <- as.integer(preds.data$seq)
+preds.data <- filter(preds.data, seq!=0)
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5,
+                       lim=16,
+                       title.flag=title.flag,
+                       title="Wage Ratio Model Effect Estimates Including LATE with 95% CI",
+                       x.name="Estimate",
+                       y.name="Effect Estimate Size")
+
+probs.graph <- cont.graphic(probs.data, 
+                            lim=15,
+                            llim=0,
+                            colors=c('darkred', 'darkblue'),
+                            y.title='Predicted Quarterly Wage Ratio Amount',
+                            title.flag=title.flag,
+                            title='Predicted Quarterly Wage Ratio by Expungement Status',
+                            periods=7,
+                            survey=FALSE)
+
+delta.graph <- ggplot(lates.data, aes(x=Sequence, y=b)) +
+  geom_point() +
+  geom_text(aes(y=ul, label=round(b, 4)), vjust=-1, size=3) +
+  geom_hline(yintercept=0) +
+  geom_errorbar(aes(ymin=ll, ymax=ul)) +
+  scale_y_continuous(limits=c(-16, 12),
+                     name='Treatment Effect Estimate Size (LATE)') +
+  scale_x_continuous(name='Admin Period (Quarter)',
+                   breaks=c(1:7),
+                   labels=c(1:7)) +
+  labs(title=ifelse(title.flag, 'Predicted Change in Wage Ratios by Quarter when Record is Expunged', ""),
+       caption=paste('p-values: ', paste(round(lates.data$pvalue,3),collapse=" | "))) +
+  theme_bw()
+
+preds.graph <- ggplot(preds.data, aes(x=Sequence, group=Expungement)) +
+    geom_line(aes(y=outcome_hat, color=Expungement)) +
+    geom_line(aes(y=outcome_hat_ll, color=Expungement), linetype='dashed') +
+    geom_line(aes(y=outcome_hat_ul, color=Expungement), linetype='dashed') +
+    geom_ribbon(aes(ymin=outcome_hat_ll, ymax=outcome_hat_ul, fill=Expungement), alpha=0.2, show.legend = FALSE) +
+    geom_hline(yintercept=0) +
+    scale_y_continuous(name='Predicted Quarterly Wage Amount',
+                       limits=c(0, 100000)) +
+    scale_x_continuous(name='Admin Period (Quarter)',
+                     breaks=c(1:7),
+                     labels=c(1:7)) +
+    scale_color_manual(name='Expungement Status',
+                       labels=c('No Expungement', 'Expungement'),
+                       values=c('darkred', 'darkblue')) +
+    scale_fill_manual(values=c('darkred', 'darkblue')) +
+    labs(title=ifelse(title.flag,'Predicted Quarterly Wage by Expungement Status',"")) +
+    theme_bw()
+
+TE.graph
+
+delta.graph
+
+probs.graph
+
+preds.graph
+
+```
+
+### Recidivism
+
+***Cross-Sectional Bivariate Probit***
+
+```{r recCSBP-Graphics}
+TE.data <- read.csv('./Stata Files/recCSAdmin_Meffects.csv')
+TE.data <- TE.data %>% filter(effect != "")
+
+TE.data$ll <- ifelse(TE.data$effect != 'late' & TE.data$ll < 0, 0, TE.data$ll)
+
+TE.graph <- ggplot(TE.data, aes(x=factor(expunge, levels=c('LATE', 0, 1)), y=b)) +
+  geom_bar(stat='identity', alpha=0.75) +
+  geom_point(aes(y=b)) +
+  geom_text(aes(y=ul, label=round(b,4)), vjust=-1, size=5) +
+  geom_hline(yintercept=0) +
+  geom_errorbar(aes(ymin=ll, ymax=ul)) +
+  scale_x_discrete(name='Effect', 
+                   breaks=c('LATE', 0, 1),
+                   labels=c('ATE', 'No Expungement', 'Expungement')) +
+  scale_y_continuous(name='Effect Size/Predicted Probability',
+                     limits=c(-1* max(abs(1.15*TE.data$ll),abs(1.15*TE.data$ul)), max(abs(1.15*TE.data$ll),abs(1.15*TE.data$ul)))) + 
+  labs(title=ifelse(title.flag,"LATE and Predicted Probabilities for Any Recidivism Across Study Period", ""),
+       caption=paste("ATE p-value: ", round(TE.data$pvalue[TE.data$effect=='late'],3))) +
+  theme_bw()
+
+TE.graph
+
+```
+
+## Survey Data Based Outcomes
+
+### Missed Rent
+
+***Bivariate Probit Model***
+
+```{r mRentBPModelMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/mRent_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/mRent_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.12, 
+                       title.flag=title.flag, 
+                       title='Average Treatment Effect (ATE) Estimate Sizes For Missed Rent\nwith 95% Confidence Intervals by Survey Period',
+                       pvalues = paste(round(TE.data$pvalue, 3), collapse = " | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/mRent_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/mRent_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.25, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Missing Rent\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+***Linear Probability Model***
+
+```{r mRentLPMMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/mRent_treatment_effectsLPM1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/mRent_treatment_effectsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.4,
+                       y.name='Treatment Effect Estimate Size (LATE)',
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Missed Rent\nwith 95% Confidence Intervals by Survey Period',
+                       pvalues = paste(round(TE.data$pvalue, 3), collapse = " | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/mRent_group_probsLPM1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/mRent_group_probsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.65, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Missing Rent\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+### Full Time Employment
+
+***Bivariate Probit***
+
+```{r fullTimeBPModelMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/full_time_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/full_time_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.075, 
+                       title.flag=title.flag, 
+                       title='Average Treatment Effect (ATE) Estimate Sizes For Full Time\nEmployment with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3),collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/full_time_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/full_time_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.5, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Being Employed Full Time\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+***Linear Probability Model***
+
+```{r fullTimeLPMMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/full_time_treatment_effectsLPM1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/full_time_treatment_effectsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.25,
+                       y.name='Treatment Effect Estimate Size (LATE)',
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Full Time\nEmployment with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3),collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/full_time_group_probsLPM1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/full_time_group_probsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=1, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Being Employed Full Time\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+### Job Satisfaction
+
+***Instrumental Variable Regression with Clustered Standard Errors***
+
+```{r jobSatIVRegressMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/jobSat_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobSat_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=1.5,
+                       y.name="Treatment Effect Estimate Size (LATE)",
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Job\nSatisfaction with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/jobSat_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobSat_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool(probs.data)
+probs.data <- filter(probs.data, Sequence!=6)
+
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.data$ll[probs.data$ll < 1] <- 1
+probs.data$ul[probs.data$ul > 4] <- 4
+
+probs.graph <- cont.graphic(probs.data, 
+                            lim=4,
+                            colors=c('red', 'blue'), 
+                            title.flag=title.flag,
+                            title='Predicted Level of Self-Reported Job Satisfaction\nIn Survey Period by Expungement Status',
+                            y.title="Predicted Level of Satisfaction (1-4 Scale)",
+                            periods=5)
+
+probs.graph
+
+```
+
+### Applied for New Job
+
+***Bivariate Probit***
+
+```{r jobApplyBPModelMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/jobApply_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobApply_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.1, 
+                       title.flag=title.flag, 
+                       title='Average Treatment Effect (ATE) Estimate Sizes For New Job\nApplication with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue, 3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/jobApply_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobApply_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.3, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Applying for New Job\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+***Linear Probability Model***
+
+```{r jobApplyLPMModelMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/jobApply_treatment_effectsLPM1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobApply_treatment_effectsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.35,
+                       y.name='Treatment Effect Estimate Size (LATE)',
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For New Job\nApplication with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue, 3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/jobApply_group_probsLPM1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobApply_group_probsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.6, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Applying for New Job\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+### Deterred from Job
+
+***Bivariate Probit Model***
+
+```{r jobDeterBPModelMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/jobDeter_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobDeter_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.15,
+                       vjust=-2,
+                       title.flag=title.flag, 
+                       title='Average Treatment Effect (ATE) Estimate Sizes For Deterred from\nSearching for New Job with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/jobDeter_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobDeter_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.3, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Deterred from Searching for New Job\nIn Survey Period by Expungement Status',
+                             period=5)
+
+probs.graph
+```
+
+***Linear Probability Model***
+
+```{r jobDeterLPMMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/jobDeter_treatment_effectsLPM1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobDeter_treatment_effectsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.6,
+                       vjust=-0.6,
+                       y.name='Treatment Effect Estimate Size (LATE)',
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Deterred from\nSearching for New Job with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/jobDeter_group_probsLPM1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/jobDeter_group_probsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.75, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Deterred from Searching for New Job\nIn Survey Period by Expungement Status',
+                             period=5)
+
+probs.graph
+```
+
+### Homelessness
+
+***Cross-Sectional Bivariate Probit***
+
+```{r homelessCSBP-Graphics}
+TE.data <- read.csv('./Stata Files/homelessCS_Meffects1.csv')
+TE.data <- TE.data %>% filter(effect != "")
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/homelessCS_Meffects',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.poolCS(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data$expunge <- c("LATE", 0, 1)
+TE.data[TE.data$Names != 'LATE',] <- TE.data[TE.data$Names != "LATE",] %>%
+  rowwise() %>%
+  mutate(ll = probll(b, se),
+         ul = probul(b, se)) %>%
+  ungroup()
+
+
+TE.graph <- ggplot(TE.data, aes(x=factor(expunge, levels=c('LATE', 0, 1)), y=b)) +
+  geom_bar(stat='identity', alpha=0.75) +
+  geom_point(aes(y=b)) +
+  geom_text(aes(y=ul, label=round(b,4)), vjust=-1, size=5) +
+  geom_hline(yintercept=0) +
+  geom_errorbar(aes(ymin=ll, ymax=ul)) +
+  scale_x_discrete(name='Effect', 
+                   breaks=c('LATE', 0, 1),
+                   labels=c('ATE', 'Record Present', 'Fully Expunged')) +
+  scale_y_continuous(name='Effect Size/Predicted Probability',
+                     limits=c(-1* max(abs(1.15*TE.data$ll),abs(1.15*TE.data$ul)), max(abs(1.15*TE.data$ll),abs(1.15*TE.data$ul)))) + 
+  labs(title=ifelse(title.flag,"ATE and Predicted Probabilities for Any Period of Homelessness\nAcross Study Period", ""),
+       caption=paste("ATE p-value: ", round(TE.data$pvalue[TE.data$expunge=='LATE'],3))) +
+  theme_bw()
+
+TE.graph
+
+```
+
+### Moved- with Utility data identified moves
+
+***Bivariate Probit***
+
+```{r MovedUtyBPModelMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/movedUty_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/movedUty_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.1, 
+                       title.flag=title.flag, 
+                       title='Average Treatment Effect (ATE) Estimate Sizes For Moving\nHousing with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/movedUty_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/movedUty_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.25, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Moving Housing\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+***Linear Probability Model***
+
+```{r MovedUtyLPMMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/movedUty_treatment_effectsLPM1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/movedUty_treatment_effectsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.3,
+                       y.name='Treatment Effect Estimate Size (LATE)',
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Moving\nHousing with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/movedUty_group_probsLPM1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/movedUty_group_probsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.5, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Moving Housing\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+### Housing Satisfaction
+
+***Instrumental Variable Regression with Clustered Standard Errors***
+
+```{r houseSatIVRegressMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/houseSat_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/houseSat_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=1,
+                       y.name="Treatment Effect Estimate Size (LATE)",
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Housing\nSatisfaction with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/houseSat_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/houseSat_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool(probs.data)
+
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.data <- filter(probs.data, Sequence != 6)
+
+probs.data$ll[probs.data$ll < 1] <- 1
+probs.data$ul[probs.data$ul > 4] <- 4
+
+probs.graph <- cont.graphic(probs.data, 
+                            lim=4,
+                            colors=c('red', 'blue'), 
+                            title.flag=title.flag,
+                            title='Predicted Level of Self-Reported Housing Satisfaction\nIn Survey Period by Expungement Status',
+                            y.title="Predicted Level of Satisfaction (1-4 Scale)",
+                            periods=5)
+
+probs.graph
+
+```
+
+### Attempted Move (Applied for New Housing)
+
+***Bivariate Probit***
+
+```{r moveAttemptBI-Graphic}
+TE.data <- read.csv('./Stata Files/moveAttempt_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveAttempt_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.1, 
+                       title.flag=title.flag, 
+                       title='Average Treatment Effect (ATE) Estimate Sizes For Attempted to Find\nNew Housing with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue, 3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/moveAttempt_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveAttempt_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.25, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Attempted to Find New Housing\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+***Linear Probability Model***
+
+```{r moveAttemptLPM-Graphic}
+TE.data <- read.csv('./Stata Files/moveAttempt_treatment_effectsLPM1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveAttempt_treatment_effectsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.4,
+                       y.name='Treatment Effect Estimate Size (LATE)',
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Attempted to Find\nNew Housing with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue, 3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/moveAttempt_group_probsLPM1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveAttempt_group_probsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$b[probs.data$b <0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.5, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Attempted to Find New Housing\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+```
+
+### Deterred from Move (Housing Application Deterrence)
+
+***Bivariate Probit Model***
+
+```{r moveDeterBP-Graphics}
+
+TE.data <- read.csv('./Stata Files/moveDeter_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveDeter_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.15,
+                       vjust=-1.25,
+                       title.flag=title.flag, 
+                       title='Average Treatment Effect (ATE) Estimate Sizes For Deterred from\nSearching for New Housing with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/moveDeter_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveDeter_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.25, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Deterred from Searching for New Housing\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+
+```
+
+***Linear Probability Model***
+
+```{r moveDeterLPM-Graphics}
+
+TE.data <- read.csv('./Stata Files/moveDeter_treatment_effectsLPM1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveDeter_treatment_effectsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b != "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=0.35,
+                       vjust=-0.75,
+                       y.name='Treatment Effect Estimate Size (LATE)',
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Deterred from\nSearching for New Housing with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/moveDeter_group_probsLPM1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/moveDeter_group_probsLPM',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool2(probs.data)
+
+probs.data$ll[probs.data$ll < 0] <- 0
+probs.data$ul[probs.data$ul > 1] <- 1
+probs.data$ul[probs.data$ul < 0] <- 0
+probs.data$b[probs.data$b < 0] <- 0
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.graph <- probs.graphic(probs.data, 
+                             lim=0.5, 
+                             colors=c('red', 'blue'), 
+                             title.flag=title.flag,
+                             title='Predicted Probabilites of Deterred from Searching for New Housing\nIn Survey Period by Expungement Status',
+                             periods=5)
+
+probs.graph
+
+```
+
+### Life Satisfaction
+
+***Instrumental Variable Regression with Clustered Standard Errors***
+
+```{r lifeSatIVRegressMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/lifeSat_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/lifeSat_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=2,
+                       y.name="Treatment Effect Estimate Size (LATE)",
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Life\nSatisfaction with 95% Confidence Intervals by Survey Period',
+                       pvalues=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/lifeSat_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/lifeSat_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool(probs.data)
+
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.data <- filter(probs.data, Sequence!=6)
+
+probs.graph <- cont.graphic(probs.data, 
+                            lim=12,
+                            colors=c('red', 'blue'), 
+                            title.flag=title.flag,
+                            title='Predicted Level of Self-Reported Life Satisfaction\nIn Survey Period by Expungement Status',
+                            y.title="Predicted Level of Satisfaction (0-11 Scale)",
+                            periods=5)
+
+probs.graph
+
+```
+
+### Combined Happiness/Agency
+
+***Instrumental Variable Regression with Clustered Standard Errors***
+
+```{r lifeCompIVRegressMI-Graphics}
+
+TE.data <- read.csv('./Stata Files/lifeComp_treatment_effectsBP1.csv')
+TE.data <- TE.data %>% filter(b != 0 & b != "" & !is.na(b))
+TE.data$Names <- c('Overall', 'Quarter 2' , 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/lifeComp_treatment_effectsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != 0 & b!= "" & !is.na(b))
+  add.data$Names <- c('Overall', 'Quarter 2', 'Quarter 3', 'Quarter 4', 'Quarter 5', 'Quarter 6')
+  TE.data <- rbind(TE.data, add.data)
+}
+
+TE.data <- TE.pool2(TE.data)
+TE.data$dfp <- (m - 1) * ((1 + mean(TE.data$varW)/((1 + 1/m)*TE.data$varB))^2)
+TE.data$pvalue <- 2 * (1 - pt(abs(TE.data$b/TE.data$se), TE.data$dfp))
+TE.data <- filter(TE.data, Names != 'Overall')
+TE.data$Names <- factor(c(1:5))
+
+TE.graph <- TE.graphic(TE.data, 
+                       textSize=5, 
+                       lim=2,
+                       y.name="Treatment Effect Estimate Size (LATE)",
+                       title.flag=title.flag, 
+                       title='Local Average Treatment Effect (LATE) Estimate Sizes For Composite Life\nSatisfaction Score with 95% Confidence Intervals by Survey Period',
+                       pvalue=paste(round(TE.data$pvalue,3), collapse=" | "))
+
+TE.graph
+
+probs.data <- read.csv('./Stata Files/lifeComp_group_probsBP1.csv')
+probs.data <- probs.data %>% filter(b != "" & !is.na(b))
+
+for(i in c(2:m)){
+  add.data <- read.csv(paste0('./Stata Files/lifeComp_group_probsBP',i,'.csv'))
+  add.data <- add.data %>% filter(b != "" & !is.na(b))
+  probs.data <- rbind(probs.data,add.data)
+}
+
+probs.data <- probs.pool(probs.data)
+
+probs.data$Expungement <- factor(probs.data$Expungement)
+
+probs.data <- filter(probs.data, Sequence!=6)
+
+probs.graph <- cont.graphic(probs.data, 
+                            lim=2,
+                            llim=-2,
+                            colors=c('red', 'blue'), 
+                            title.flag=title.flag,
+                            title='Predicted Level of Composite Life Satisfaction Score\nIn Survey Period by Expungement Status',
+                            y.title="Composite Life Satisfaction Score",
+                            periods=5)
+
+probs.graph
+
+```
+
